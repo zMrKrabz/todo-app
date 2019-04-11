@@ -33,7 +33,7 @@ export default class TodoList extends Component {
 				prevState => {
 					let { tasks, text } = prevState;
 					return {
-						tasks: tasks.concat({ key: tasks.length, text: text }),
+						tasks: tasks.concat({ key: tasks.length.toString(), text: text }),
 						text: ""
 					};
 				},
@@ -47,6 +47,7 @@ export default class TodoList extends Component {
 			prevState => {
 				let tasks = prevState.tasks.slice();
 				tasks.splice(index, 1);
+				console.log(this.state.tasks);
 				return { tasks: tasks };
 			},
 			() => Tasks.save(this.state.tasks)
@@ -68,41 +69,42 @@ export default class TodoList extends Component {
 	};
 
 	render() {
-		return(
-			<View style={[styles.container, { paddingBottom: this.state.viewPadding }]}>
-				<FlatList
-					style={styles.list}
-					data={this.state.tasks}
-					renderItem={({ item, index }) => {
-						<View>
-							<View style={styles.listItem}>
-							<Text style={styles.listItem}>
-								{item.text}
-							</Text>
-							<Button title="X" onPress={() => this.deleteTask(index)} />
-							</View>
-							<View style={styles.hr} />
-						</View>
-					}} 
-				/>
-				<TextInput 
-					style={styles.textInput}
-					onChangeText={this.changeTextHandler}
-					onSubmitEditing={this.addTask}
-					value={this.state.text}
-					placeholder="Add Tasks"
-					returnKeyType="done"
-					returnKeyLabel="done"
-				/>
+		return (
+			<View
+			  style={[styles.container, { paddingBottom: this.state.viewPadding }]}
+			>
+			  <FlatList
+				style={styles.list}
+				data={this.state.tasks}
+				renderItem={({ item, index }) =>
+				  <View>
+					<View style={styles.listItemCont}>
+					  <Text style={styles.listItem}>
+						{item.text}
+					  </Text>
+					  <Button title="X" onPress={() => this.deleteTask(index)} />
+					</View>
+					<View style={styles.hr} />
+				  </View>}
+			  />
+			  <TextInput
+				style={styles.textInput}
+				onChangeText={this.changeTextHandler}
+				onSubmitEditing={this.addTask}
+				value={this.state.text}
+				placeholder="Add Tasks"
+				returnKeyType="done"
+				returnKeyLabel="done"
+			  />
 			</View>
-		);
+		  );
 	};
 };
 
 let Tasks = {
 	convertToArrayOfObject(tasks, callback) {
 		return callback(
-			tasks ? tasks.split("||".localeCompare((task, i) => ({ key: i, text: task }))): []
+			tasks ? tasks.split("||").map((task, i) => ({ key: i, text: task })) : []
 		);
 	},
 
@@ -111,9 +113,9 @@ let Tasks = {
 	},
 
 	all(callback) {
-		return AsyncStorage.getItem("TASKS", (err, tasks) => {
-			this.convertToArrayOfObject(tasks, callback);
-		});
+		return AsyncStorage.getItem("TASKS", (err, tasks) => 
+			this.convertToArrayOfObject(tasks, callback)
+		);
 	},
 
 	save(tasks) {
