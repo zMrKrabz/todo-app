@@ -11,11 +11,13 @@ import {
 	Keyboard,
 	Platform
  } from 'react-native';
+ import Navigation from './screens/Navigator';
+ let exports = module.exports = {};
 
 const isAndroid = Platform.OS == "android";
 const viewPadding = 10;
 
-export default class TodoList extends Component {
+exports.TodoList = class TodoList extends Component {
 	state = {
 		tasks: [],
 		text: ''
@@ -71,31 +73,34 @@ export default class TodoList extends Component {
 	render() {
 		return (
 			<View
-			  style={[styles.container, { paddingBottom: this.state.viewPadding }]}
+				style={[styles.container, { paddingBottom: this.state.viewPadding }]}
 			>
-			  <FlatList
-				style={styles.list}
-				data={this.state.tasks}
-				renderItem={({ item, index }) =>
-				  <View>
-					<View style={styles.listItemCont}>
-					  <Text style={styles.listItem}>
-						{item.text}
-					  </Text>
-					  <Button title="X" onPress={() => this.deleteTask(index)} />
-					</View>
-					<View style={styles.hr} />
-				  </View>}
-			  />
-			  <TextInput
-				style={styles.textInput}
-				onChangeText={this.changeTextHandler}
-				onSubmitEditing={this.addTask}
-				value={this.state.text}
-				placeholder="Add Tasks"
-				returnKeyType="done"
-				returnKeyLabel="done"
-			  />
+				<FlatList
+					style={styles.list}
+					data={this.state.tasks}
+					renderItem={({ item, index }) =>
+						<View>
+						<View style={styles.listItemCont}>
+							<Text style={styles.listItem}>
+							{item.text}
+							</Text>
+							<Button title="X" onPress={() => this.deleteTask(index)} />
+						</View>
+						<View style={styles.hr} />
+						</View>}
+				/>
+				<TextInput
+					style={styles.textInput}
+					onChangeText={this.changeTextHandler}
+					onSubmitEditing={this.addTask}
+					value={this.state.text}
+					placeholder="Add Tasks"
+					returnKeyType="done"
+					returnKeyLabel="done"
+				/>
+				<View style={{ flex: 1 }}>
+					<Navigation />
+				</View>
 			</View>
 		  );
 	};
@@ -140,7 +145,7 @@ const styles = StyleSheet.create({
 	listItem: {
 		paddingTop: 2,
 		paddingBottom: 2,
-		fontSize: 2
+		fontSize: 18
 	},
 
 	hr: {
