@@ -1,17 +1,58 @@
 import {
 	createBottomTabNavigator,
-	createAppContainer}
+	createAppContainer,
+	createStackNavigator,
+	SwitchNavigator}
 	from 'react-navigation';
-import TodoList from '../App';
+import TodoList from './todo-list';
 import Settings from './Settings-Screen';
 import { FontAwesome } from '@expo/vector-icons';
-import React from 'react';
+import React, { Component } from 'react';
 
-const Navigation=createBottomTabNavigator({
-	Home: { screen: TodoList,
+const BottomTabNavigator=createBottomTabNavigator({
+	TodoList: { screen: TodoList,
 			tabBarIcon: <FontAwesome size={ 20 } name={ 'cogs' }/>},
 	Settings: { screen: Settings,
 				tabBarIcon: <FontAwesome size={ 20 } name={ 'cogs' }/> }
+}, {
+	tabBarOptions: {
+		labelStyle: {
+			fontSize: 14
+		}
+	}
 });
 
-export default Navigation;
+/* 
+const StackNavigator = createStackNavigator({
+		TodoList, BottomTabNavigator
+	},
+	{
+		initialRouteName: 'TODOs'
+	}
+);
+
+const RootStack = createStackNavigator(
+	{
+		Main: {
+			screen: StackNavigator
+		}
+	},
+	{
+		mode: 'modal',
+		headerMode: 'none'
+	}
+)
+*/
+
+const AppContainer = createAppContainer(BottomTabNavigator);
+export default AppContainer;
+
+/*
+export default class App extends Component {
+	render() {
+		return (
+			<AppContainer />
+		)
+	}
+}
+*/

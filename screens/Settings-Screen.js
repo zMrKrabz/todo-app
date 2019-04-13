@@ -11,10 +11,8 @@ import {
 	Keyboard,
 	Platform
  } from 'react-native';
- import Navigation from './Navigator';
- let exports = module.exports = {};
 
- exports.Settings = class Settings extends Component {
+export default class Settings extends Component {
 	 state = {
 		 tasks: []
 	 };
@@ -23,7 +21,6 @@ import {
 		 return (
 			 <View style={{ flex: 1 }}>
 				 <Text>Hello Settings</Text>
-				 <Navigation />
 			 </View>
 		 )
 	 }
